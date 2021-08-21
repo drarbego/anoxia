@@ -40,6 +40,9 @@ func _ready():
 	var current_cell = cells[0]
 	carve_maze(current_cell)
 	fill_tilemap()
+	# var player = Player.new()
+	# player.position = Vector2(64, 64)
+	# add_child(player)
 
 func populate_cells():
 	for i in range(rows):
@@ -114,10 +117,9 @@ func remove_wall(current, neighbor):
 
 
 func _unhandled_input(event):
-	if event.is_action_released("refresh"):
-		reset_cells()
-		carve_maze(cells[0])
-		fill_tilemap()
+	if Input.is_key_pressed(KEY_P):
+		var cell_pos = ($Player.position / $TileMap.cell_size.x).floor()
+		$TileMap.set_cellv(cell_pos, -1)
 
 func reset_cells():
 	for cell in cells:
@@ -127,24 +129,41 @@ func reset_cells():
 		cell.down_wall = true
 		cell.visited = false
 
+func _get_tile_id(cell):
+	var walls = str(int(cell.up_wall)) + str(int(cell.right_wall)) + str(int(cell.down_wall)) + str(int(cell.left_wall))
+	match walls: # 0000 and 1111 will not exist
+		"0001":
+			return 0
+		"0010":
+			return 1
+		"0011":
+			return 2
+		"0100":
+			return 3
+		"0101":
+			return 4
+		"0110":
+			return 5
+		"0111":
+			return 6
+		"1000":
+			return 7
+		"1001":
+			return 8
+		"1010":
+			return 9
+		"1011":
+			return 10
+		"1100":
+			return 11
+		"1101":
+			return 12
+		"1110":
+			return 13
+
+	return -1
+
 func fill_tilemap():
 	for cell in cells:
-		var tl = cell.get_top_left_xy()
-		var br = cell.get_bottom_right_xy()
-		var local_x = 0
-		var local_y = 0
-		for x in range(tl.x, br.x):
-			local_y = 0
-			for y in range(tl.y, br.y):
-				var tile_id = -1
-				if cell.up_wall and local_y == 0:
-					tile_id = 0
-				if cell.down_wall and local_y == cell.square_tiles-1:
-					tile_id = 0
-				if cell.right_wall and local_x == cell.square_tiles-1:
-					tile_id = 0
-				if cell.left_wall and local_x == 0:
-					tile_id = 0
-				$TileMap.set_cell(x, y, tile_id)
-				local_y += 1
-			local_x += 1
+		var tile_id  = self._get_tile_id(cell)
+		$TileMap.set_cell(cell.x, cell.y, tile_id)
