@@ -1,17 +1,17 @@
 extends Node2D
 
-const TILE_SIZE = 64
 var cells = []
-export var rows = 8
-export var cols = 8
+export var rows = 10
+export var cols = 10
 
+const Player = preload("res://Player.tscn")
 
 class Cell:
 	var x
 	var y
-	var square_tiles = 3
-	var size = square_tiles * TILE_SIZE
 	var visited = false
+
+	var cost = -1
 
 	var up_wall = true
 	var down_wall = true
@@ -22,27 +22,59 @@ class Cell:
 		self.x = _x
 		self.y = _y
 
-	func get_rect():
-		return Rect2(
-			Vector2(self.x*self.size, self.y*self.size),
-			Vector2(self.size, self.size)
-		)
-
-	func get_top_left_xy():
-		return Vector2(self.x * square_tiles, self.y * square_tiles)
-
-	func get_bottom_right_xy():
-		return Vector2((self.x+1) * square_tiles, (self.y+1)*square_tiles)
-
 func _ready():
 	randomize()
 	populate_cells()
 	var current_cell = cells[0]
 	carve_maze(current_cell)
 	fill_tilemap()
-	# var player = Player.new()
-	# player.position = Vector2(64, 64)
-	# add_child(player)
+
+	var player = Player.instance().init(
+		Vector2(64, 64),
+		0,
+		funcref(self, "can_move_to_pos"),
+		funcref(self, "is_different_cell"),
+		funcref(self, "move_to_new_cell")
+	)
+	add_child(player)
+	cells[0].cost = 1
+
+func move_to_new_cell(new_pos, player):
+	var new_player_pos = (new_pos / $TileMap.cell_size.x).floor()
+	var cell_index = self._get_cell_index(new_player_pos.x, new_player_pos.y)
+	if cell_index == null:
+		return
+
+	var new_cell = cells[cell_index]
+	var previous_cell = cells[player.current_cell_index]
+
+	if new_cell.cost == 1:
+		previous_cell.cost = -1
+	if new_cell.cost == -1:
+		previous_cell.cost = 1
+
+	player.current_cell_index = cell_index
+	player.move_points += new_cell.cost
+
+func is_different_cell(new_pos, player):
+	var new_player_pos = (new_pos / $TileMap.cell_size.x).floor()
+	var cell_index = self._get_cell_index(new_player_pos.x, new_player_pos.y)
+	if cell_index == null:
+		return false
+
+	return cell_index != player.current_cell_index
+
+func can_move_to_pos(new_pos, player):
+	var new_player_pos = (new_pos / $TileMap.cell_size.x).floor()
+	var cell_index = self._get_cell_index(new_player_pos.x, new_player_pos.y)
+	if cell_index == null:
+		return false
+
+	var cell = cells[cell_index]
+	if cell.cost + player.move_points >= 0:
+		return true
+
+	return false
 
 func populate_cells():
 	for i in range(rows):
@@ -116,11 +148,6 @@ func remove_wall(current, neighbor):
 		neighbor.down_wall = false
 
 
-func _unhandled_input(event):
-	if Input.is_key_pressed(KEY_P):
-		var cell_pos = ($Player.position / $TileMap.cell_size.x).floor()
-		$TileMap.set_cellv(cell_pos, -1)
-
 func reset_cells():
 	for cell in cells:
 		cell.left_wall = true
@@ -167,3 +194,21 @@ func fill_tilemap():
 	for cell in cells:
 		var tile_id  = self._get_tile_id(cell)
 		$TileMap.set_cell(cell.x, cell.y, tile_id)
+
+func _process(_delta):
+	update()
+
+func _draw():
+	for cell in cells:
+		var color = Color(0, 1, 0.75, 0.25)
+		var rect = Rect2(
+			cell.x * $TileMap.cell_size.x,
+			cell.y * $TileMap.cell_size.y,
+			$TileMap.cell_size.x,
+			$TileMap.cell_size.y
+		)
+		if cell.cost == 1:
+			draw_rect(
+				rect,
+				color
+			)
