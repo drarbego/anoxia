@@ -1,10 +1,17 @@
 extends Node2D
 
+enum CELL_CONTENT {
+	ENEMY_SPAWNER,
+	OXYGEN_DUCT
+}
+
 var cells = []
 export var rows = 10
 export var cols = 10
 
 const Player = preload("res://Player.tscn")
+const EnemySpawner = preload("res://EnemySpawner.tscn")
+const OxygenDuct = preload("res://OxygenDuct.tscn")
 
 class Cell:
 	var x
@@ -12,6 +19,8 @@ class Cell:
 	var visited = false
 
 	var cost = -1
+
+	var content = null
 
 	var up_wall = true
 	var down_wall = true
@@ -25,16 +34,17 @@ class Cell:
 func _ready():
 	randomize()
 	populate_cells()
-	var current_cell = cells[0]
-	carve_maze(current_cell)
+	carve_maze(cells[0])
 	fill_tilemap()
+	fill_cell_content()
 
 	var player = Player.instance().init(
 		Vector2(256, 256),
 		0,
 		funcref(self, "can_move_to_pos"),
 		funcref(self, "is_different_cell"),
-		funcref(self, "move_to_new_cell")
+		funcref(self, "move_to_new_cell"),
+		funcref(self, "get_cell_at")
 	)
 	add_child(player)
 	cells[0].cost = 1
@@ -76,10 +86,23 @@ func can_move_to_pos(new_pos, player):
 
 	return false
 
+func get_cell_at(index):
+	if index < 0 or index > (rows * cols) -1:
+		return null
+
+	return cells[index]
+
 func populate_cells():
 	for i in range(rows):
 		for j in range(cols):
-			cells.append(Cell.new(j, i))
+			var cell = Cell.new(j, i)
+			var is_end_or_start = (i == 0 and j == 0) or (i == rows-1 and j == cols-1)
+			if randf() <= 0.3 and not is_end_or_start:
+				if randf() <= 0.4:
+					cell.content = CELL_CONTENT.OXYGEN_DUCT
+				else:
+					cell.content = CELL_CONTENT.ENEMY_SPAWNER
+			cells.append(cell)
 
 func carve_maze(initial_cell):
 	var stack = []
@@ -196,6 +219,21 @@ func fill_tilemap():
 	for cell in cells:
 		var tile_id  = self._get_tile_id(cell)
 		$TileMap.set_cell(cell.x, cell.y, tile_id)
+
+func fill_cell_content():
+	for cell in cells:
+		var pos = Vector2(
+			(cell.x * $TileMap.cell_size.x) + ($TileMap.cell_size.x / 2),
+			(cell.y * $TileMap.cell_size.y) + ($TileMap.cell_size.y / 2)
+		)
+		if cell.content == CELL_CONTENT.ENEMY_SPAWNER:
+			var enemy_spawner = EnemySpawner.instance()
+			enemy_spawner.position = pos
+			add_child(enemy_spawner)
+		if cell.content == CELL_CONTENT.OXYGEN_DUCT:
+			var oxygen_duct = OxygenDuct.instance()
+			oxygen_duct.position = pos
+			add_child(oxygen_duct)
 
 func _process(_delta):
 	update()
