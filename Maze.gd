@@ -30,7 +30,7 @@ func _ready():
 	fill_tilemap()
 
 	var player = Player.instance().init(
-		Vector2(64, 64),
+		Vector2(256, 256),
 		0,
 		funcref(self, "can_move_to_pos"),
 		funcref(self, "is_different_cell"),
@@ -158,6 +158,8 @@ func reset_cells():
 
 func _get_tile_id(cell):
 	var walls = str(int(cell.up_wall)) + str(int(cell.right_wall)) + str(int(cell.down_wall)) + str(int(cell.left_wall))
+	# Walls are represented as a binary string where each wall is represented clockwise
+	# starting by the north wall. The string should be read from left to right
 	match walls: # 0000 and 1111 will not exist
 		"0001":
 			return 0

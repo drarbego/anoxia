@@ -20,9 +20,14 @@ func init(initial_pos, cell_index, _can_move_to_pos, _is_different_cell, _move_t
 
 	return self
 
+func _process(delta):
+	var mouse_dir = (get_global_mouse_position() - self.position).normalized() * 64
+	$Gun.position = mouse_dir
+	$Gun.rotation = mouse_dir.angle()
+
 func _physics_process(delta):
-	var x = int(Input.is_key_pressed(KEY_RIGHT)) - int(Input.is_key_pressed(KEY_LEFT))
-	var y = int(Input.is_key_pressed(KEY_DOWN)) - int(Input.is_key_pressed(KEY_UP))
+	var x = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
+	var y = int(Input.is_action_pressed("move_down")) - int(Input.is_action_pressed("move_up"))
 	var dir = Vector2(x, y).normalized()
 	var new_pos = self.position + dir * speed * delta
 	if self.is_different_cell.call_func(new_pos, self):
