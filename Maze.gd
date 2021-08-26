@@ -30,6 +30,9 @@ class Cell:
 	func _init(_x, _y):
 		self.x = _x
 		self.y = _y
+	
+	func set_cost(new_cost):
+		self.cost = new_cost
 
 func _ready():
 	randomize()
@@ -41,10 +44,7 @@ func _ready():
 	var player = Player.instance().init(
 		Vector2(256, 256),
 		0,
-		funcref(self, "can_move_to_pos"),
-		funcref(self, "is_different_cell"),
-		funcref(self, "move_to_new_cell"),
-		funcref(self, "get_cell_at")
+		self
 	)
 	add_child(player)
 	cells[0].cost = 1
@@ -59,12 +59,14 @@ func move_to_new_cell(new_pos, player):
 	var previous_cell = cells[player.current_cell_index]
 
 	if new_cell.cost == 1:
-		previous_cell.cost = -1
+		previous_cell.set_cost(-1)
 	if new_cell.cost == -1:
-		previous_cell.cost = 1
+		previous_cell.set_cost(1)
 
 	player.current_cell_index = cell_index
 	player.move_points += new_cell.cost
+
+	new_cell.set_cost(1)
 
 func is_different_cell(new_pos, player):
 	var new_player_pos = (new_pos / $TileMap.cell_size.x).floor()
@@ -103,6 +105,10 @@ func populate_cells():
 				else:
 					cell.content = CELL_CONTENT.ENEMY_SPAWNER
 			cells.append(cell)
+
+func get_cell_index_from_pos(pos):
+	var coords = (pos / $TileMap.cell_size.x).floor()
+	return self._get_cell_index(coords.x, coords.y)
 
 func carve_maze(initial_cell):
 	var stack = []

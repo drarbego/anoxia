@@ -49,10 +49,10 @@ points = PoolVector2Array( 0, 512, 0, 0, 512, 0, 512, 64, 64, 64, 64, 512 )
 [sub_resource type="ConvexPolygonShape2D" id=15]
 points = PoolVector2Array( 512, 64, 0, 64, 0, 0, 512, 0 )
 
-[sub_resource type="ConvexPolygonShape2D" id=17]
+[sub_resource type="ConvexPolygonShape2D" id=16]
 points = PoolVector2Array( 512, 512, 0, 512, 0, 448, 512, 448 )
 
-[sub_resource type="TileSet" id=16]
+[sub_resource type="TileSet" id=17]
 0/name = "maze-map.png 0"
 0/texture = ExtResource( 2 )
 0/tex_offset = Vector2( 0, 0 )
@@ -271,7 +271,7 @@ points = PoolVector2Array( 512, 512, 0, 512, 0, 448, 512, 448 )
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 17 ),
+"shape": SubResource( 16 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 9/z_index = 0
@@ -365,7 +365,7 @@ script = ExtResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
 show_behind_parent = true
-tile_set = SubResource( 16 )
+tile_set = SubResource( 17 )
 cell_size = Vector2( 512, 512 )
 format = 1
 
