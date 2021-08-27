@@ -1,7 +1,7 @@
 extends BaseState
 
 func ready(_player):
-	print("PLAYER IS ATTACHED")
+	pass
 
 func physics_process(delta, player):
 	var x = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
@@ -10,9 +10,7 @@ func physics_process(delta, player):
 	var new_pos = player.position + dir * player.speed * delta
 
 	if player.maze.is_different_cell(new_pos, player):
-		print("is different cell")
 		if player.maze.can_move_to_pos(new_pos, player):
-			print("can move to pos")
 			player.move_and_slide(dir * player.speed)
 			player.maze.move_to_new_cell(new_pos, player)
 	else:

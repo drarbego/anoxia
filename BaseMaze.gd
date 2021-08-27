@@ -38,12 +38,18 @@ func populate_cells():
 	for i in range(rows):
 		for j in range(cols):
 			var cell = Cell.new(j, i)
-			var is_end_or_start = (i == 0 and j == 0) or (i == rows-1 and j == cols-1)
-			if randf() <= 0.3 and not is_end_or_start:
+			var is_end = (i == rows-1 and j == cols-1)
+			var is_start = (i == 0 and j == 0)
+
+			if is_start:
+				cell.content = CELL_CONTENT.OXYGEN_DUCT
+
+			if randf() <= 0.6 and not (is_end or is_start):
 				if randf() <= 0.4:
 					cell.content = CELL_CONTENT.OXYGEN_DUCT
 				else:
 					cell.content = CELL_CONTENT.ENEMY_SPAWNER
+
 			cells.append(cell)
 
 func get_cell_index_from_pos(pos):

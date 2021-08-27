@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://BaseState.gd"
 }, {
 "base": "KinematicBody2D",
+"class": "Bullet",
+"language": "GDScript",
+"path": "res://Bullet.gd"
+}, {
+"base": "KinematicBody2D",
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player.gd"
@@ -27,6 +32,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "BaseMaze": "",
 "BaseState": "",
+"Bullet": "",
 "Player": ""
 }
 

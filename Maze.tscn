@@ -368,6 +368,7 @@ script = ExtResource( 1 )
 show_behind_parent = true
 tile_set = SubResource( 17 )
 cell_size = Vector2( 512, 512 )
+collision_layer = 3
 format = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

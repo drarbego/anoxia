@@ -1,7 +1,6 @@
 extends BaseState
 
 func ready(player):
-	print("PLAYER IS DETACHED")
 	for cell in player.maze.cells:
 		cell.set_cost(-1)
 
