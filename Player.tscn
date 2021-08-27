@@ -27,6 +27,9 @@ current = true
 position = Vector2( 64, 0 )
 texture = ExtResource( 3 )
 
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="States" type="Node" parent="."]
 
 [node name="Attached" type="Node" parent="States"]
@@ -34,3 +37,4 @@ script = ExtResource( 5 )
 
 [node name="Detached" type="Node" parent="States"]
 script = ExtResource( 4 )
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_CooldownTimer_timeout"]

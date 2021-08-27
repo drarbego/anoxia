@@ -2,17 +2,18 @@ extends KinematicBody2D
 
 class_name Player
 
-const Bullet = preload("res://Bullet.tscn")
-
 export var speed = 800
 export var initial_move_points = 5
 var move_points = initial_move_points
 
+# Main player state
 var current_cell_index = null
+var is_cooled_down = true
 
 var maze = null
 
 onready var current_state = $States/Attached
+
 
 func init(
 	initial_pos,
@@ -40,6 +41,12 @@ func set_state(new_state):
 		self.current_state = new_state
 		self.current_state.ready(self)
 
+func _handle_shooting():
+	if is_cooled_down:
+		self.maze.spawn_bullet($Gun.global_position)
+		is_cooled_down = false
+		$CooldownTimer.start()
+
 func _process(_delta):
 	var mouse_dir = (get_global_mouse_position() - self.position).normalized() * 64
 	$Gun.position = mouse_dir
@@ -48,16 +55,14 @@ func _process(_delta):
 
 func _unhandled_input(event):
 	if event.is_action_released("shoot"):
-		add_child(
-			Bullet.instance().init(
-				$Gun.position,
-				(get_global_mouse_position() - self.position).normalized()
-			)
-		)
+		self._handle_shooting()
 	if event.is_action_pressed("do_action"):
 		self.set_state($States/Attached)
 	if event.is_action_pressed("release"):
 		self.set_state($States/Detached)
+
+func _on_CooldownTimer_timeout():
+	self.is_cooled_down = true
 
 func _physics_process(delta):
 	if self.current_state:

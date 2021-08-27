@@ -1,8 +1,9 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Maze.gd" type="Script" id=1]
 [ext_resource path="res://Assets/maze-map.png" type="Texture" id=2]
 [ext_resource path="res://Assets/spaceship_loop.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Assets/deep_space.jpeg" type="Texture" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 64, 512, 0, 512, 0, 0, 64, 0 )
@@ -372,3 +373,13 @@ format = 1
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 autoplay = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 1240, 800 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+centered = false

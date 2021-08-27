@@ -9,9 +9,13 @@ var cells = []
 export var rows = 10
 export var cols = 10
 
+var player = null
+
 const Player = preload("res://Player.tscn")
 const EnemySpawner = preload("res://EnemySpawner.tscn")
 const OxygenDuct = preload("res://OxygenDuct.tscn")
+const Bullet = preload("res://Bullet.tscn")
+
 
 class Cell:
 	var x
@@ -41,7 +45,7 @@ func _ready():
 	fill_tilemap()
 	fill_cell_content()
 
-	var player = Player.instance().init(
+	self.player = Player.instance().init(
 		Vector2(256, 256),
 		0,
 		self
@@ -109,6 +113,13 @@ func populate_cells():
 func get_cell_index_from_pos(pos):
 	var coords = (pos / $TileMap.cell_size.x).floor()
 	return self._get_cell_index(coords.x, coords.y)
+
+func spawn_bullet(pos):
+	var bullet = Bullet.instance().init(
+		pos,
+		(get_global_mouse_position() - self.player.position).normalized()
+	)
+	add_child(bullet)
 
 func carve_maze(initial_cell):
 	var stack = []
