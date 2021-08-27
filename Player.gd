@@ -43,7 +43,7 @@ func set_state(new_state):
 
 func _handle_shooting():
 	if is_cooled_down:
-		self.maze.spawn_bullet($Gun.global_position)
+		self.maze.spawn_bullet(self)
 		is_cooled_down = false
 		$CooldownTimer.start()
 

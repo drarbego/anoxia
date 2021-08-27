@@ -22,6 +22,8 @@ shape = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+limit_smoothed = true
+smoothing_enabled = true
 
 [node name="Gun" type="Sprite" parent="."]
 position = Vector2( 64, 0 )
