@@ -10,8 +10,6 @@ void fragment() {
 	uv.x *= 1.7;
 	float dist_to_center = length(uv);
 
-	//COLOR = mix(shadow, bg, 1.0 - dist_to_center * 1.5);
-
 	if (dist_to_center < visibility_radius) {
 		COLOR = bg;
 	} else {
