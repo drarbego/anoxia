@@ -1,12 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Enemy.gd" type="Script" id=1]
+[ext_resource path="res://Wander.gd" type="Script" id=2]
+[ext_resource path="res://Assets/alien.png" type="Texture" id=3]
+[ext_resource path="res://Attack.gd" type="Script" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 32.0
+radius = 60.0
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 60.0
+radius = 80.0
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 256.0
 
 [node name="Enemy" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -20,4 +26,32 @@ collision_mask = 2147483650
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource( 2 )
+
+[node name="States" type="Node" parent="."]
+
+[node name="Wander" type="Node" parent="States"]
+script = ExtResource( 2 )
+
+[node name="Attack" type="Node" parent="States"]
+script = ExtResource( 4 )
+
+[node name="WanderTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource( 3 )
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
+[connection signal="timeout" from="WanderTimer" to="." method="_on_WanderTimer_timeout"]
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_DetectionArea_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_DetectionArea_body_exited"]
+[connection signal="timeout" from="CooldownTimer" to="States/Attack" method="_on_CooldownTimer_timeout"]

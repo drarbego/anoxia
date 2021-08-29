@@ -1,17 +1,27 @@
 extends BaseState
 
+
+var oxygen_increase = 5
+
 func ready(_player):
 	pass
 
 func physics_process(delta, player):
-	var x = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
-	var y = int(Input.is_action_pressed("move_down")) - int(Input.is_action_pressed("move_up"))
-	var dir = Vector2(x, y).normalized()
-	var new_pos = player.position + dir * player.speed * delta
+	player.oxygen_points = clamp(
+		player.oxygen_points + (oxygen_increase * delta),
+		0,
+		player.initial_oxygen_points
+	)
+	player.update_ui()
+
+	var dir = player.get_dir()
+	var speed = player.get_speed()
+
+	var new_pos = player.position + dir * speed * delta
 
 	if player.maze.is_different_cell(new_pos, player):
 		if player.maze.can_move_to_pos(new_pos, player):
-			player.move_and_slide(dir * player.speed)
+			player.move_and_slide(dir * speed)
 			player.maze.move_to_new_cell(new_pos, player)
 	else:
-		player.move_and_slide(dir * player.speed)
+		player.move_and_slide(dir * speed)

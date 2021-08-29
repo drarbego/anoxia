@@ -150,3 +150,16 @@ func _draw():
 				rect,
 				color
 			)
+
+func _on_RestartButton_pressed():
+	get_tree().change_scene("res://Maze.tscn")
+
+func update_ui(player):
+	var health_rate = (
+		player.health_points / player.initial_health_points
+	) * $CanvasLayer/CenterContainer/HBoxContainer/HealthBar.max_value
+	$CanvasLayer/CenterContainer/HBoxContainer/HealthBar.value = health_rate
+	var oxygen_rate = (
+		player.oxygen_points / player.initial_oxygen_points
+	) * $CanvasLayer/CenterContainer/HBoxContainer/OxygenBar.max_value
+	$CanvasLayer/CenterContainer/HBoxContainer/OxygenBar.value = oxygen_rate
