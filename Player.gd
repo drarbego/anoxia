@@ -66,7 +66,14 @@ func _process(_delta):
 	$Gun.rotation = mouse_dir.angle()
 	$Gun.flip_v = mouse_dir.x < 0
 
-func _unhandled_input(event):
+	var origin = get_global_transform_with_canvas().origin
+	var normalized_pos = Vector2(
+		origin.x / get_viewport_rect().size.x,
+		origin.y / get_viewport_rect().size.y
+	)
+	$Camera2D/CanvasLayer/ColorRect.material.set_shader_param("player_pos", normalized_pos)
+
+func _input(event):
 	if event.is_action_released("shoot"):
 		self._handle_shooting()
 	if event.is_action_pressed("do_action"):

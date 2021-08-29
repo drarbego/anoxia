@@ -1,14 +1,20 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/astronaut.png" type="Texture" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
 [ext_resource path="res://Assets/gun.png" type="Texture" id=3]
 [ext_resource path="res://Detached.gd" type="Script" id=4]
 [ext_resource path="res://Attached.gd" type="Script" id=5]
+[ext_resource path="res://camera_visibility.shader" type="Shader" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 24.0
 height = 48.0
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 6 )
+shader_param/visibility_radius = 0.2
+shader_param/player_pos = Vector2( 0.5, 0.5 )
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
@@ -30,6 +36,16 @@ drag_margin_left = 0.1
 drag_margin_top = 0.1
 drag_margin_right = 0.1
 drag_margin_bottom = 0.1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Camera2D"]
+
+[node name="ColorRect" type="ColorRect" parent="Camera2D/CanvasLayer"]
+material = SubResource( 3 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Gun" type="Sprite" parent="."]
 position = Vector2( 64, 0 )
