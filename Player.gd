@@ -49,7 +49,10 @@ func set_state(new_state):
 		self.current_state.ready(self)
 
 func _handle_shooting():
-	if is_cooled_down:
+	if self.game_over:
+		return
+
+	if self.is_cooled_down:
 		self.maze.spawn_bullet(self)
 		is_cooled_down = false
 		$CooldownTimer.start()
