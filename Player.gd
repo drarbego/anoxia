@@ -8,7 +8,7 @@ export var initial_move_points = 5
 var move_points = initial_move_points
 export var initial_health_points = 50.0
 var health_points = initial_health_points
-export var initial_oxygen_points = 50.0
+export var initial_oxygen_points = 100.0
 var oxygen_points = initial_oxygen_points
 export var initial_ammo = 5;
 var ammo = initial_ammo;
@@ -37,6 +37,7 @@ func init(
 	return self
 
 func set_state(new_state):
+	# --- TODO IMPROVE THIS CODE
 	if new_state == $States/Attached:
 		var current_cell = self.maze.get_cell_at(self.current_cell_index)
 		if current_cell.content == 1: # HEY >:( USE ENUMS, WTF DOES THE 1 MEAN??

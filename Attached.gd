@@ -3,8 +3,8 @@ extends BaseState
 
 var oxygen_increase = 5
 
-func ready(_player):
-	pass
+func ready(player):
+	player.maze.tube_cells = [player.maze.get_cell_at(player.current_cell_index)]
 
 func physics_process(delta, player):
 	player.oxygen_points = clamp(

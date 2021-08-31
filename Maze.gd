@@ -7,6 +7,7 @@ const OxygenDuct = preload("res://OxygenDuct.tscn")
 const Bullet = preload("res://Bullet.tscn")
 const Item = preload("res://Item.tscn")
 
+var tube_cells = []
 
 func _ready():
 	randomize()
@@ -22,6 +23,7 @@ func _ready():
 	)
 	add_child(player)
 	cells[0].cost = 1
+	self.tube_cells.append(cells[0])
 
 func move_to_new_cell(new_pos, player):
 	var new_player_pos = (new_pos / $TileMap.cell_size.x).floor()
@@ -32,15 +34,20 @@ func move_to_new_cell(new_pos, player):
 	var new_cell = cells[cell_index]
 	var previous_cell = cells[player.current_cell_index]
 
-	if new_cell.cost == 1:
-		previous_cell.set_cost(-1)
-	if new_cell.cost == -1:
-		previous_cell.set_cost(1)
+	previous_cell.set_cost(new_cell.cost * -1)
 
 	player.current_cell_index = cell_index
 	player.move_points += new_cell.cost
 
 	new_cell.set_cost(1)
+
+	# --- TODO IMPROVE THIS CODE
+	var tube_cells_count = len(self.tube_cells)
+
+	if not new_cell in self.tube_cells:
+		self.tube_cells.append(new_cell)
+	elif tube_cells_count and previous_cell == self.tube_cells[tube_cells_count - 1]:
+		self.tube_cells.pop_back()
 
 func is_different_cell(new_pos, player):
 	var new_player_pos = (new_pos / $TileMap.cell_size.x).floor()
@@ -143,19 +150,34 @@ func _process(_delta):
 	update()
 
 func _draw():
-	for cell in cells:
-		var color = Color(0, 1, 0.75, 0.25)
-		var rect = Rect2(
-			cell.x * $TileMap.cell_size.x,
-			cell.y * $TileMap.cell_size.y,
-			$TileMap.cell_size.x,
-			$TileMap.cell_size.y
-		)
-		if cell.cost == 1:
-			draw_rect(
-				rect,
-				color
+	if self.tube_cells:
+		var previous_cell = self.tube_cells[0]
+		for cell in self.tube_cells.slice(1, len(self.tube_cells) -2):
+			var start = Vector2(
+				previous_cell.x * $TileMap.cell_size.x + $TileMap.cell_size.x / 2,
+				previous_cell.y * $TileMap.cell_size.y + $TileMap.cell_size.y / 2
 			)
+			var end = Vector2(
+				cell.x * $TileMap.cell_size.x + $TileMap.cell_size.x / 2,
+				cell.y * $TileMap.cell_size.y + $TileMap.cell_size.y / 2
+			)
+			draw_line(
+				start,
+				end,
+				Color(0, 0, 0, 1),
+				5
+			)
+			previous_cell = cell
+		var start = Vector2(
+			previous_cell.x * $TileMap.cell_size.x + $TileMap.cell_size.x / 2,
+			previous_cell.y * $TileMap.cell_size.y + $TileMap.cell_size.y / 2
+		)
+		draw_line(
+			start,
+			$Player.position,
+			Color(0, 0, 0, 1),
+			4
+		)
 
 func _on_RestartButton_pressed():
 	get_tree().change_scene("res://Maze.tscn")

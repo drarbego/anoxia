@@ -68,7 +68,7 @@ wait_time = 0.3
 one_shot = true
 
 [node name="RechargingTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 3.0
 one_shot = true
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_CooldownTimer_timeout"]
 [connection signal="timeout" from="HitBackTimer" to="." method="_on_HitBackTimer_timeout"]

@@ -4,6 +4,7 @@ extends BaseState
 var oxygen_decrease = 5
 
 func ready(player):
+	player.maze.tube_cells = []
 	for cell in player.maze.cells:
 		cell.set_cost(-1)
 
