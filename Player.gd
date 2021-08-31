@@ -10,6 +10,8 @@ export var initial_health_points = 50.0
 var health_points = initial_health_points
 export var initial_oxygen_points = 50.0
 var oxygen_points = initial_oxygen_points
+export var initial_ammo = 5;
+var ammo = initial_ammo;
 
 # Main player state
 var current_cell_index = null
@@ -49,13 +51,14 @@ func set_state(new_state):
 		self.current_state.ready(self)
 
 func _handle_shooting():
-	if self.game_over:
+	if self.game_over or not self.is_cooled_down or self.ammo <= 0:
 		return
 
-	if self.is_cooled_down:
-		self.maze.spawn_bullet(self)
-		is_cooled_down = false
-		$CooldownTimer.start()
+	self.maze.spawn_bullet(self)
+	is_cooled_down = false
+	$CooldownTimer.start()
+	self.ammo -= 1
+	self.update_ui()
 
 func _process(_delta):
 	if self.game_over:
@@ -121,3 +124,15 @@ func update_ui():
 func set_game_over(is_game_over):
 	self.game_over = is_game_over
 	maze.get_node("CanvasLayer/GameOverOptions").visible = is_game_over
+
+func add_ammo(count):
+	self.ammo += count
+	("add ammo")
+
+func add_move_points(points):
+	self.initial_move_points += points
+	self.move_points += points
+
+func add_health_points(points):
+	self.initial_health_points += points
+	self.health_points = clamp(self.health_points + points, 0, self.initial_health_points)

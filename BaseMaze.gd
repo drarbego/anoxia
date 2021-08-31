@@ -4,7 +4,8 @@ class_name BaseMaze
 
 enum CELL_CONTENT {
 	ENEMY_SPAWNER,
-	OXYGEN_DUCT
+	OXYGEN_DUCT,
+	ITEMS
 }
 
 var cells = []
@@ -38,19 +39,14 @@ func populate_cells():
 	for i in range(rows):
 		for j in range(cols):
 			var cell = Cell.new(j, i)
-			var is_end = (i == rows-1 and j == cols-1)
-			var is_start = (i == 0 and j == 0)
 
-			if is_start:
-				cell.content = CELL_CONTENT.OXYGEN_DUCT
-
-			if randf() <= 0.6 and not (is_end or is_start):
-				if randf() <= 0.4:
-					cell.content = CELL_CONTENT.OXYGEN_DUCT
-				else:
-					cell.content = CELL_CONTENT.ENEMY_SPAWNER
+			var probability = randf()
+			if probability < 0.6:
+				var content = CELL_CONTENT[CELL_CONTENT.keys()[randi() % len(CELL_CONTENT)]]
+				cell.content = content
 
 			cells.append(cell)
+	cells[0].content = CELL_CONTENT.OXYGEN_DUCT
 
 func get_cell_index_from_pos(pos):
 	var coords = (pos / $TileMap.cell_size.x).floor()

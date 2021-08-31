@@ -370,7 +370,6 @@ tile_set = SubResource( 17 )
 cell_size = Vector2( 512, 512 )
 collision_layer = 3
 format = 1
-tile_data = PoolIntArray( 0, 0, 0 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
@@ -395,8 +394,8 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer"]
-margin_left = 310.0
-margin_right = 714.0
+margin_left = 297.0
+margin_right = 726.0
 margin_bottom = 30.0
 
 [node name="OxygenBar" type="ProgressBar" parent="CanvasLayer/CenterContainer/HBoxContainer"]
@@ -411,6 +410,15 @@ margin_right = 404.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 200, 30 )
 value = 100.0
+
+[node name="AmmoLabel" type="Label" parent="CanvasLayer/CenterContainer/HBoxContainer"]
+margin_left = 408.0
+margin_top = 8.0
+margin_right = 429.0
+margin_bottom = 22.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+text = "5/5"
 
 [node name="GameOverOptions" type="CenterContainer" parent="CanvasLayer"]
 visible = false

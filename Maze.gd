@@ -5,6 +5,7 @@ const Player = preload("res://Player.tscn")
 const Enemy = preload("res://Enemy.tscn")
 const OxygenDuct = preload("res://OxygenDuct.tscn")
 const Bullet = preload("res://Bullet.tscn")
+const Item = preload("res://Item.tscn")
 
 
 func _ready():
@@ -108,6 +109,7 @@ func _get_tile_id(cell):
 		"1110":
 			return 13
 
+	print("Resulting cell walls ", walls, "did not match")
 	return -1
 
 func fill_tilemap():
@@ -132,6 +134,10 @@ func fill_cell_content():
 			var oxygen_duct = OxygenDuct.instance()
 			oxygen_duct.position = pos
 			add_child(oxygen_duct)
+		if cell.content == CELL_CONTENT.ITEMS:
+			var item = Item.instance()
+			item.position = pos
+			add_child(item)
 
 func _process(_delta):
 	update()
@@ -159,7 +165,11 @@ func update_ui(player):
 		player.health_points / player.initial_health_points
 	) * $CanvasLayer/CenterContainer/HBoxContainer/HealthBar.max_value
 	$CanvasLayer/CenterContainer/HBoxContainer/HealthBar.value = health_rate
+
 	var oxygen_rate = (
 		player.oxygen_points / player.initial_oxygen_points
 	) * $CanvasLayer/CenterContainer/HBoxContainer/OxygenBar.max_value
 	$CanvasLayer/CenterContainer/HBoxContainer/OxygenBar.value = oxygen_rate
+
+	var ammo_message = str(player.ammo) + " disparos"
+	$CanvasLayer/CenterContainer/HBoxContainer/AmmoLabel.set_text(ammo_message)
