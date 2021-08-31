@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 class_name Player
 
-export var initial_speed = 400
+export var initial_speed = 500
 var speed = initial_speed
 export var initial_move_points = 5
 var move_points = initial_move_points
@@ -15,10 +15,12 @@ var ammo = initial_ammo;
 
 # Main player state
 var current_cell_index = null
-var is_cooled_down = true
-var is_recharging_ammo = false
 var hit_back_dir = Vector2.ZERO
 var game_over = false
+var is_cooled_down = true
+var is_recharging_ammo = false
+var is_attached = true
+var is_near_oxygen_duct = false
 
 var maze = null
 
@@ -39,16 +41,12 @@ func init(
 func set_state(new_state):
 	# --- TODO IMPROVE THIS CODE
 	if new_state == $States/Attached:
-		var current_cell = self.maze.get_cell_at(self.current_cell_index)
-		if current_cell.content == 1: # HEY >:( USE ENUMS, WTF DOES THE 1 MEAN??
-			for cell in self.maze.cells:
-				cell.set_cost(-1)
-			self.move_points = self.initial_move_points - 1
-			self.maze.move_to_new_cell(self.position, self)
-
+		if self.is_near_oxygen_duct:
+			self.is_attached = true
 			self.current_state = new_state
 			self.current_state.ready(self)
 	if new_state == $States/Detached:
+		self.is_attached = false
 		self.current_state = new_state
 		self.current_state.ready(self)
 
@@ -67,6 +65,15 @@ func _handle_shooting():
 	self.ammo -= 1
 	self.update_ui()
 
+func _handle_action():
+	if self.is_attached:
+		if self.is_near_oxygen_duct:
+			self.set_state($States/Attached)
+		else:
+			self.set_state($States/Detached)
+	else:
+		self.set_state($States/Attached)
+
 func _process(_delta):
 	if self.game_over:
 		return
@@ -84,12 +91,13 @@ func _process(_delta):
 	$Camera2D/CanvasLayer/ColorRect.material.set_shader_param("player_pos", normalized_pos)
 
 func _input(event):
+	if game_over:
+		return
+
 	if event.is_action_released("shoot"):
 		self._handle_shooting()
 	if event.is_action_pressed("do_action"):
-		self.set_state($States/Attached)
-	if event.is_action_pressed("release"):
-		self.set_state($States/Detached)
+		self._handle_action()
 
 func _on_CooldownTimer_timeout():
 	self.is_cooled_down = true

@@ -86,7 +86,9 @@ func _get_tile_id(cell):
 	var walls = str(int(cell.up_wall)) + str(int(cell.right_wall)) + str(int(cell.down_wall)) + str(int(cell.left_wall))
 	# Walls are represented as a binary string where each wall is represented clockwise
 	# starting by the north wall. The string should be read from left to right
-	match walls: # 0000 and 1111 will not exist
+	match walls: # 1111 will not exist
+		"0000":
+			return 14
 		"0001":
 			return 0
 		"0010":

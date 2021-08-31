@@ -4,6 +4,10 @@ extends BaseState
 var oxygen_increase = 5
 
 func ready(player):
+	for cell in player.maze.cells:
+		cell.set_cost(-1)
+	player.move_points = player.initial_move_points - 1
+	player.maze.move_to_new_cell(player.position, player)
 	player.maze.tube_cells = [player.maze.get_cell_at(player.current_cell_index)]
 
 func physics_process(delta, player):
