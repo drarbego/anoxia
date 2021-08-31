@@ -389,14 +389,17 @@ layer = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
 anchor_right = 1.0
+anchor_bottom = 0.0833333
+margin_bottom = -50.0
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": true
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer"]
-margin_left = 297.0
-margin_right = 726.0
-margin_bottom = 30.0
+margin_left = 258.0
+margin_right = 766.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
 
 [node name="OxygenBar" type="ProgressBar" parent="CanvasLayer/CenterContainer/HBoxContainer"]
 margin_right = 200.0
@@ -411,14 +414,25 @@ margin_bottom = 30.0
 rect_min_size = Vector2( 200, 30 )
 value = 100.0
 
-[node name="AmmoLabel" type="Label" parent="CanvasLayer/CenterContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer/HBoxContainer"]
 margin_left = 408.0
-margin_top = 8.0
-margin_right = 429.0
-margin_bottom = 22.0
+margin_right = 508.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="AmmoLabel" type="Label" parent="CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer"]
+margin_right = 100.0
+margin_bottom = 14.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
 text = "5/5"
+
+[node name="AmmoBar" type="ProgressBar" parent="CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer"]
+visible = false
+margin_top = 18.0
+margin_right = 100.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 10 )
 
 [node name="GameOverOptions" type="CenterContainer" parent="CanvasLayer"]
 visible = false

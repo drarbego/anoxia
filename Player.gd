@@ -16,6 +16,7 @@ var ammo = initial_ammo;
 # Main player state
 var current_cell_index = null
 var is_cooled_down = true
+var is_recharging_ammo = false
 var hit_back_dir = Vector2.ZERO
 var game_over = false
 
@@ -55,8 +56,13 @@ func _handle_shooting():
 		return
 
 	self.maze.spawn_bullet(self)
-	is_cooled_down = false
+
+	self.is_cooled_down = false
 	$CooldownTimer.start()
+
+	self.is_recharging_ammo = true
+	$RechargingTimer.start()
+
 	self.ammo -= 1
 	self.update_ui()
 
@@ -86,6 +92,13 @@ func _input(event):
 
 func _on_CooldownTimer_timeout():
 	self.is_cooled_down = true
+
+func _on_RechargingTimer_timeout():
+	self.ammo = clamp(self.ammo + 1, 0, self.initial_ammo)
+	if self.ammo < self.initial_ammo:
+		$RechargingTimer.start()
+	else:
+		self.is_recharging_ammo = false
 
 func _physics_process(delta):
 	if self.game_over:
@@ -125,9 +138,9 @@ func set_game_over(is_game_over):
 	self.game_over = is_game_over
 	maze.get_node("CanvasLayer/GameOverOptions").visible = is_game_over
 
-func add_ammo(count):
-	self.ammo += count
-	("add ammo")
+func add_ammo(points):
+	self.initial_ammo += points
+	self.ammo += points
 
 func add_move_points(points):
 	self.initial_move_points += points

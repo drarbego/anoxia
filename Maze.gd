@@ -171,5 +171,15 @@ func update_ui(player):
 	) * $CanvasLayer/CenterContainer/HBoxContainer/OxygenBar.max_value
 	$CanvasLayer/CenterContainer/HBoxContainer/OxygenBar.value = oxygen_rate
 
-	var ammo_message = str(player.ammo) + " disparos"
-	$CanvasLayer/CenterContainer/HBoxContainer/AmmoLabel.set_text(ammo_message)
+	var ammo_message = str(player.ammo) + "/" + str(player.initial_ammo)
+	$CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer/AmmoLabel.set_text(ammo_message)
+
+	if player.is_recharging_ammo:
+		var timer = player.get_node("RechargingTimer")
+		$CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer/AmmoBar.value = (
+			(timer.wait_time - timer.time_left) / timer.wait_time
+		) * $CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer/AmmoBar.max_value
+		$CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer/AmmoBar.visible = true
+	else:
+		$CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer/AmmoBar.value = 0
+		$CanvasLayer/CenterContainer/HBoxContainer/VBoxContainer/AmmoBar.visible = false
