@@ -10,7 +10,7 @@ export var initial_health_points = 50.0
 var health_points = initial_health_points
 export var initial_oxygen_points = 100.0
 var oxygen_points = initial_oxygen_points
-export var initial_ammo = 5;
+export var initial_ammo = 25;
 var ammo = initial_ammo;
 
 # Main player state
@@ -94,7 +94,7 @@ func _input(event):
 	if game_over:
 		return
 
-	if event.is_action_released("shoot"):
+	if event.is_action_pressed("shoot"):
 		self._handle_shooting()
 	if event.is_action_pressed("do_action"):
 		self._handle_action()

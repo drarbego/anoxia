@@ -3,7 +3,8 @@ extends KinematicBody2D
 class_name Bullet
 
 var dir = Vector2.ZERO
-var speed = 1600
+var speed = 1600.0
+var damage = 5.0
 
 
 func init(_pos, _dir):

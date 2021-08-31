@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Enemy.gd" type="Script" id=1]
 [ext_resource path="res://Wander.gd" type="Script" id=2]
@@ -13,6 +13,30 @@ radius = 80.0
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 256.0
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.768627, 0.580392, 0.580392, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 1, 0, 0, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+corner_detail = 3
+
+[sub_resource type="Theme" id=6]
+ProgressBar/colors/font_color = Color( 0.94, 0.94, 0.94, 1 )
+ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
+ProgressBar/fonts/font = null
+ProgressBar/styles/bg = SubResource( 4 )
+ProgressBar/styles/fg = SubResource( 5 )
 
 [node name="Enemy" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -36,7 +60,7 @@ script = ExtResource( 2 )
 script = ExtResource( 4 )
 
 [node name="WanderTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 5.0
 autostart = true
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -50,6 +74,18 @@ shape = SubResource( 3 )
 [node name="CooldownTimer" type="Timer" parent="."]
 wait_time = 0.6
 one_shot = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+margin_top = 58.0
+margin_right = 100.0
+margin_bottom = 73.0
+rect_min_size = Vector2( 100, 15 )
+theme = SubResource( 6 )
+value = 100.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
 [connection signal="timeout" from="WanderTimer" to="." method="_on_WanderTimer_timeout"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_DetectionArea_body_entered"]

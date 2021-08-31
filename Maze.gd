@@ -1,8 +1,7 @@
 extends BaseMaze
 
 const Player = preload("res://Player.tscn")
-# const EnemySpawner = preload("res://EnemySpawner.tscn")
-const Enemy = preload("res://Enemy.tscn")
+const EnemySpawner = preload("res://EnemySpawner.tscn")
 const OxygenDuct = preload("res://OxygenDuct.tscn")
 const Bullet = preload("res://Bullet.tscn")
 const Item = preload("res://Item.tscn")
@@ -133,12 +132,9 @@ func fill_cell_content():
 			(cell.y * $TileMap.cell_size.y) + ($TileMap.cell_size.y / 2)
 		)
 		if cell.content == CELL_CONTENT.ENEMY_SPAWNER:
-			# var enemy_spawner = EnemySpawner.instance()
-			# enemy_spawner.position = pos
-			# add_child(enemy_spawner)
-			var enemy = Enemy.instance()
-			enemy.position = pos
-			add_child(enemy)
+			var enemy_spawner = EnemySpawner.instance()
+			enemy_spawner.position = pos
+			add_child(enemy_spawner)
 		if cell.content == CELL_CONTENT.OXYGEN_DUCT:
 			var oxygen_duct = OxygenDuct.instance()
 			oxygen_duct.position = pos
@@ -167,7 +163,7 @@ func _draw():
 				start,
 				end,
 				Color(0, 0, 0, 1),
-				5
+				10
 			)
 			previous_cell = cell
 		var start = Vector2(
