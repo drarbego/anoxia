@@ -1,8 +1,8 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Assets/Animations/Player/Death/final-0067.png" type="Texture" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
-[ext_resource path="res://Assets/gun.png" type="Texture" id=3]
+[ext_resource path="res://Assets/LEMONMILK-Regular.otf" type="DynamicFontData" id=3]
 [ext_resource path="res://Detached.gd" type="Script" id=4]
 [ext_resource path="res://Attached.gd" type="Script" id=5]
 [ext_resource path="res://camera_visibility.shader" type="Shader" id=6]
@@ -73,6 +73,10 @@ animations = [ {
 "speed": 16.0
 } ]
 
+[sub_resource type="DynamicFont" id=6]
+size = 24
+font_data = ExtResource( 3 )
+
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
 
@@ -80,9 +84,8 @@ script = ExtResource( 2 )
 position = Vector2( 0, -20 )
 scale = Vector2( 0.2, 0.2 )
 frames = SubResource( 4 )
-animation = "death"
-frame = 2
-playing = true
+animation = "shooting"
+offset = Vector2( 0, 40 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 5 )
@@ -109,10 +112,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Gun" type="Sprite" parent="."]
-position = Vector2( 64, 0 )
-texture = ExtResource( 3 )
-
 [node name="CooldownTimer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
@@ -130,7 +129,7 @@ wait_time = 0.3
 one_shot = true
 
 [node name="RechargingTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 0.8
 one_shot = true
 
 [node name="ControlHint" type="AnimatedSprite" parent="."]
@@ -138,6 +137,21 @@ visible = false
 position = Vector2( 13.3484, -96.1084 )
 frames = SubResource( 3 )
 animation = "press_space"
+
+[node name="Gun" type="Position2D" parent="."]
+position = Vector2( 52, 17 )
+
+[node name="SquaresLabel" type="Label" parent="."]
+margin_top = -72.0
+margin_right = 40.0
+margin_bottom = -58.0
+custom_fonts/font = SubResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_CooldownTimer_timeout"]
 [connection signal="timeout" from="HitBackTimer" to="." method="_on_HitBackTimer_timeout"]
 [connection signal="timeout" from="RechargingTimer" to="." method="_on_RechargingTimer_timeout"]

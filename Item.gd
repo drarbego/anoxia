@@ -27,7 +27,7 @@ func _on_Item_body_entered(body):
 	if body is Player:
 		match self.type:
 			TYPES.AMMO:
-				body.add_ammo(1)
+				body.add_ammo(5)
 			TYPES.HEALTH:
 				body.add_health_points(10)
 			TYPES.OXYGEN_TUBE:

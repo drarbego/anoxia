@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/LEMONMILK-Regular.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://Welcome.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 1 )
+
+[node name="Welcome" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+margin_bottom = 300.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -325.5
+margin_top = -23.0
+margin_right = 325.5
+margin_bottom = 23.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 651.0
+margin_bottom = 22.0
+custom_fonts/font = SubResource( 1 )
+text = "Necesitarás un tubo de oxígeno demasiado largo para salir de aquí"
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_top = 26.0
+margin_right = 651.0
+margin_bottom = 46.0
+text = "Jugar"
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]

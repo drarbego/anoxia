@@ -8,7 +8,8 @@ export var initial_health_points = 100.0
 var health_points = initial_health_points
 
 var is_dying = false
-var dying_seconds = 2.0
+var initial_dying_seconds = 0.5
+var dying_seconds = initial_dying_seconds
 
 
 func _ready():
@@ -49,4 +50,5 @@ func _process(delta):
 		self.queue_free()
 	if is_dying:
 		self.dying_seconds -= delta
+		$Sprite.modulate.a = self.dying_seconds / self.initial_dying_seconds
 		return

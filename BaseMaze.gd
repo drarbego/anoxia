@@ -13,6 +13,10 @@ var cells = []
 export var rows = 10
 export var cols = 10
 
+export var initial_enemy_tiles = 15
+export var initial_item_tiles = 10
+export var initial_oxygen_tiles = 20
+
 
 class Cell:
 	var x
@@ -35,20 +39,25 @@ class Cell:
 	func set_cost(new_cost):
 		self.cost = new_cost
 
+func _fill_with(count, content):
+	while count > 0:
+		var rand_cell = cells[randi() % len(cells)]
+		if rand_cell.content:
+			continue
+		rand_cell.content = content
+		count -= 1
 
 func populate_cells():
 	for i in range(rows):
 		for j in range(cols):
-			var cell = Cell.new(j, i)
+			cells.append(Cell.new(j, i))
 
-			var probability = randf()
-			if probability < 0.6:
-				var content = CELL_CONTENT[CELL_CONTENT.keys()[randi() % len(CELL_CONTENT)]]
-				cell.content = content
-
-			cells.append(cell)
 	cells[0].content = CELL_CONTENT.OXYGEN_DUCT
 	cells[len(cells)-1].content = CELL_CONTENT.EXIT
+
+	self._fill_with(self.initial_enemy_tiles, CELL_CONTENT.ENEMY_SPAWNER)
+	self._fill_with(self.initial_item_tiles, CELL_CONTENT.ITEMS)
+	self._fill_with(self.initial_oxygen_tiles, CELL_CONTENT.OXYGEN_DUCT)
 
 func get_cell_index_from_pos(pos):
 	var coords = (pos / $TileMap.cell_size.x).floor()

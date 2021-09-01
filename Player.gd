@@ -81,8 +81,6 @@ func _process(_delta):
 
 	var mouse_dir = (get_global_mouse_position() - self.position).normalized() * 64
 	$Gun.position = mouse_dir
-	$Gun.rotation = mouse_dir.angle()
-	$Gun.flip_v = mouse_dir.x < 0
 
 	var origin = get_global_transform_with_canvas().origin
 	var normalized_pos = Vector2(
@@ -157,6 +155,8 @@ func _on_HitBackTimer_timeout():
 
 func update_ui():
 	self.maze.update_ui(self)
+	var squares_message = str(self.move_points) + (" cuadros" if self.move_points != 1 else " cuadro")
+	$SquaresLabel.set_text(squares_message)
 
 func set_game_over(is_game_over):
 	self.game_over = is_game_over
