@@ -19,6 +19,7 @@ func physics_process(delta, player):
 	player.update_ui()
 
 	var dir = player.get_dir()
+	player.is_running = dir != Vector2.ZERO
 	var speed = player.get_speed()
 
 	var new_pos = player.position + dir * speed * delta

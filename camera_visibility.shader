@@ -1,6 +1,6 @@
 shader_type	canvas_item;
 
-uniform float visibility_radius = 0.2;
+uniform float visibility_radius = 0.35;
 uniform vec2 player_pos = vec2(0.5, 0.5);
 const vec4 shadow = vec4(0.0, 0.0, 0.0, 1.0);
 

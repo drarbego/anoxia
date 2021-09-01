@@ -5,6 +5,7 @@ const EnemySpawner = preload("res://EnemySpawner.tscn")
 const OxygenDuct = preload("res://OxygenDuct.tscn")
 const Bullet = preload("res://Bullet.tscn")
 const Item = preload("res://Item.tscn")
+const Exit = preload("res://Exit.tscn")
 
 var tube_cells = []
 
@@ -143,6 +144,10 @@ func fill_cell_content():
 			var item = Item.instance()
 			item.position = pos
 			add_child(item)
+		if cell.content == CELL_CONTENT.EXIT:
+			var exit = Exit.instance()
+			exit.position = pos
+			add_child(exit)
 
 func _process(_delta):
 	update()
@@ -162,8 +167,8 @@ func _draw():
 			draw_line(
 				start,
 				end,
-				Color(0, 0, 0, 1),
-				10
+				Color.whitesmoke,
+				15
 			)
 			previous_cell = cell
 		var start = Vector2(
@@ -173,8 +178,8 @@ func _draw():
 		draw_line(
 			start,
 			$Player.position,
-			Color(0, 0, 0, 1),
-			4
+			Color.whitesmoke,
+			15
 		)
 
 func _on_RestartButton_pressed():

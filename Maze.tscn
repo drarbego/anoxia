@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Maze.gd" type="Script" id=1]
 [ext_resource path="res://maze_tiles_big.tres" type="TileSet" id=2]
-[ext_resource path="res://Assets/spaceship_loop.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Assets/loop_principal.ogg" type="AudioStream" id=3]
 [ext_resource path="res://Assets/deep_space.jpeg" type="Texture" id=4]
 
 [node name="Maze" type="Node2D"]
@@ -17,6 +17,7 @@ format = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
+autoplay = true
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 

@@ -19,6 +19,7 @@ func physics_process(delta, player):
 		player.set_game_over(true)
 
 	var dir = player.get_dir()
+	player.is_running = dir != Vector2.ZERO
 	var speed = player.get_speed()
 
 	player.move_and_slide(dir * speed)

@@ -3,7 +3,7 @@ extends StaticBody2D
 
 const Enemy = preload("res://Enemy.tscn")
 
-export var max_enemies = 4
+export var max_enemies = 2
 export var initial_health_points = 100.0
 var health_points = initial_health_points
 
@@ -23,7 +23,6 @@ func spawn_enemy():
 	$Enemies.add_child(enemy)
 
 func _on_HitBox_body_entered(body):
-	print("body entered")
 	if body is Bullet:
 		body.queue_free()
 		self._handle_damage(body)

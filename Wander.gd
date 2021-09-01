@@ -17,11 +17,15 @@ func _get_random_dir():
 
 	return Vector2.ZERO
 
+# improve this code, plz
 func ready(enemy):
 	self.dir = _get_random_dir()
+	enemy.get_node("Body").rotation = self.dir.angle() - PI/2
+	# enemy.get_node("Body").play("walking")
 	enemy.get_node("WanderTimer").start()
 
 func physics_process(delta, enemy, _player):
 	var collision = enemy.move_and_collide(self.dir * self.speed * delta)
 	if collision:
 		self.dir=_get_random_dir()
+		enemy.get_node("Body").rotation = self.dir.angle() - PI/2

@@ -5,7 +5,8 @@ class_name BaseMaze
 enum CELL_CONTENT {
 	ENEMY_SPAWNER,
 	OXYGEN_DUCT,
-	ITEMS
+	ITEMS,
+	EXIT
 }
 
 var cells = []
@@ -47,6 +48,7 @@ func populate_cells():
 
 			cells.append(cell)
 	cells[0].content = CELL_CONTENT.OXYGEN_DUCT
+	cells[len(cells)-1].content = CELL_CONTENT.EXIT
 
 func get_cell_index_from_pos(pos):
 	var coords = (pos / $TileMap.cell_size.x).floor()

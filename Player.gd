@@ -21,6 +21,7 @@ var is_cooled_down = true
 var is_recharging_ammo = false
 var is_attached = true
 var is_near_oxygen_duct = false
+var is_running = false
 
 var maze = null
 
@@ -90,6 +91,20 @@ func _process(_delta):
 	)
 	$Camera2D/CanvasLayer/ColorRect.material.set_shader_param("player_pos", normalized_pos)
 
+	if self.is_near_oxygen_duct:
+		$ControlHint.visible = true
+		$ControlHint.play("press_space")
+	else:
+		$ControlHint.visible = false
+	
+	if not self.is_cooled_down:
+		$Body.play("shooting")
+	elif self.is_running and self.hit_back_dir == Vector2.ZERO:
+		$Body.play("running")
+	else:
+		$Body.play("idle")
+	$Body.rotation = mouse_dir.angle() - PI/2
+
 func _input(event):
 	if game_over:
 		return
@@ -146,6 +161,8 @@ func update_ui():
 func set_game_over(is_game_over):
 	self.game_over = is_game_over
 	maze.get_node("CanvasLayer/GameOverOptions").visible = is_game_over
+	if game_over:
+		$Body.play("death")
 
 func add_ammo(points):
 	self.initial_ammo += points
