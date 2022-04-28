@@ -5,8 +5,8 @@ The theme for this game jam was "Demasiado largo" (Too long), so I made a game a
 ## controls
 Usa [W] [A] [S] [D] to move
 
-[ESPACIO] connect or disconnect from oxygen source
+[SPACE] connect or disconnect from oxygen source
 
-[CLIC] to shoot
+[CLICK] to shoot
 
 You can play it [here](https://drarbego.itch.io/anoxia)
